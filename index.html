@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Jurnal Literasi Membaca - SDN 183/II Sumber Mulya</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* ... (CSS Anda) ... */
+        body {
+            box-sizing: border-box;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .nav-active {
+            background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+            color: white;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #fffef7 0%, #faf8f1 100%);
+        }
+        
+        @media (max-width: 768px) {
+            .mobile-nav {
+                overflow-x: auto;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+            .mobile-nav::-webkit-scrollbar {
+                display: none;
+            }
+            .mobile-grid {
+                grid-template-columns: 1fr;
+            }
+            .mobile-text {
+                font-size: 0.875rem;
+            }
+            .mobile-padding {
+                padding: 1rem;
+            }
+            .mobile-header {
+                padding: 1rem;
+            }
+        }
+        
+        button, .clickable {
+            min-height: 44px;
+            touch-action: manipulation;
+        }
+        
+        input, select, textarea {
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body class="gradient-bg min-h-screen">
+    <header class="bg-white shadow-sm border-b">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6 mobile-header">
+            <div class="flex flex-col sm:flex-row items-center justify-center text-center sm:text-left gap-4">
+                <img src="https://iili.io/KEeE8DF.th.png" alt="Logo Sekolah" class="w-20 h-20 sm:w-24 sm:h-24 object-contain">
+                <div>
+                    <h1 class="text-xl sm:text-3xl font-bold text-yellow-600 uppercase tracking-wide">JURNAL LITERASI MEMBACA</h1>
+                    <p class="text-sm sm:text-lg text-gray-700 mt-1 sm:mt-2 font-medium">SDN 183/II Sumber Mulya</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="bg-white shadow-sm">
+        <div class="max-w-6xl mx-auto px-2 sm:px-6">
+            <div class="flex justify-center space-x-1 mobile-nav">
+                <button onclick="showPage('perpustakaan')" id="nav-perpustakaan" class="nav-active px-3 sm:px-6 py-3 text-xs sm:text-sm font-medium rounded-t-lg transition-all whitespace-nowrap">
+                    Perpustakaan Digital
+                </button>
+                <button onclick="showPage('jurnal')" id="nav-jurnal" class="px-3 sm:px-6 py-3 text-xs sm:text-sm font-medium text-gray-600 hover:text-gray-800 rounded-t-lg transition-all whitespace-nowrap">
+                    Jurnal Membaca
+                </button>
+                <button onclick="showPage('statistik')" id="nav-statistik" class="px-3 sm:px-6 py-3 text-xs sm:text-sm font-medium text-gray-600 hover:text-gray-800 rounded-t-lg transition-all whitespace-nowrap">
+                    Statistik & Peringkat
+                </button>
+                <button onclick="showPage('rekapan')" id="nav-rekapan" class="px-3 sm:px-6 py-3 text-xs sm:text-sm font-medium text-gray-600 hover:text-gray-800 rounded-t-lg transition-all whitespace-nowrap">
+                    Rekapan Data
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-8">
+        <div id="page-perpustakaan" class="page-content fade-in">
+            <div class="bg-white rounded-xl shadow-sm p-4 sm:p-8 mobile-padding">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Perpustakaan Digital</h2>
+                <p class="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">Akses koleksi buku digital untuk mendukung kegiatan literasi membaca</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mobile-grid">
+                    <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 hover:shadow-lg transition-all cursor-pointer border border-yellow-200" onclick="window.open('https://literacycloud.org', '_blank', 'noopener,noreferrer')">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Literacy Cloud</h3>
+                        <p class="text-gray-600 text-sm mb-4">Platform buku digital dengan koleksi lengkap untuk semua tingkat</p>
+                        <div class="flex items-center text-yellow-600 text-sm font-medium">
+                            <span>Buka Perpustakaan</span>
+                            <span class="ml-2">→</span>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 hover:shadow-lg transition-all cursor-pointer border border-yellow-200" onclick="window.open('https://buku.kemendikdasmen.go.id', '_blank', 'noopener,noreferrer')">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">SIBI</h3>
+                        <p class="text-gray-600 text-sm mb-4">Sistem Informasi Buku Indonesia dari Kemendikbudristek</p>
+                        <div class="flex items-center text-yellow-600 text-sm font-medium">
+                            <span>Buka Perpustakaan</span>
+                            <span class="ml-2">→</span>
+                        </div>
+                    </div>
+                    <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 hover:shadow-lg transition-all cursor-pointer border border-yellow-200" onclick="window.open('https://budi.kemendikdasmen.go.id', '_blank', 'noopener,noreferrer')">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">BUDI</h3>
+                        <p class="text-gray-600 text-sm mb-4">Buku Digital Interaktif untuk pembelajaran yang menyenangkan</p>
+                        <div class="flex items-center text-yellow-600 text-sm font-medium">
+                            <span>Buka Perpustakaan</span>
+                            <span class="ml-2">→</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-jurnal" class="page-content hidden">
+            <div class="bg-white rounded-xl shadow-sm p-4 sm:p-8 mobile-padding">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Jurnal Membaca</h2>
+                <p class="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">Catat aktivitas membaca Anda untuk membangun kebiasaan literasi yang baik</p>
+                
+                <form id="jurnalForm" class="space-y-4 sm:space-y-6">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
+                            <input type="text" id="nama" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
+                            <select id="kelas" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
+                                <option value="">Pilih Kelas</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Tanggal Membaca</label>
+                            <input type="date" id="tanggal" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Judul Buku</label>
+                            <input type="text" id="judul" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Ringkasan Buku</label>
+                        <textarea id="ringkasan" required rows="6" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all" placeholder="Tuliskan ringkasan singkat tentang buku yang telah dibaca..."></textarea>
+                    </div>
+                    
+                    <button type="submit" id="submitButton" class="w-full bg-gradient-to-r from-yellow-500 to-yellow-600 text-white py-3 px-6 rounded-lg font-medium hover:from-yellow-600 hover:to-yellow-700 transition-all transform hover:scale-105">
+                        Simpan Jurnal Membaca
+                    </button>
+                </form>
+                
+                <div id="successMessage" class="hidden mt-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                    <div class="flex items-center">
+                        <span class="text-green-600 mr-2">✓</span>
+                        <span class="text-green-800">Jurnal berhasil disimpan! Data Anda kini tersimpan aman di cloud.</span>
+                    </div>
+                </div>
+                <div id="errorMessage" class="hidden mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <div class="flex items-center">
+                        <span class="text-red-600 mr-2">❌</span>
+                        <span class="text-red-800">Gagal menyimpan data. Cek koneksi internet Anda.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-statistik" class="page-content hidden">
+            <div class="bg-white rounded-xl shadow-sm p-4 sm:p-8 mobile-padding">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Statistik & Peringkat</h2>
+                <p class="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">Lihat pencapaian dan peringkat siswa dalam kegiatan literasi membaca (Data dari Cloud)</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                    <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200">
+                        <div class="text-right mb-4">
+                            <span class="text-3xl font-bold text-yellow-600" id="totalEntries">0</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-800">Total Jurnal</h3>
+                        <p class="text-sm text-gray-600">Jurnal yang telah dibuat</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200">
+                        <div class="text-right mb-4">
+                            <span class="text-3xl font-bold text-yellow-600" id="activeStudents">0</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-800">Siswa Aktif</h3>
+                        <p class="text-sm text-gray-600">Siswa yang sudah mengisi</p>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200">
+                        <div class="text-right mb-4">
+                            <span class="text-3xl font-bold text-yellow-600" id="totalBooks">0</span>
+                        </div>
+                        <h3 class="font-semibold text-gray-800">Buku Dibaca</h3>
+                        <p class="text-sm text-gray-600">Total buku yang dibaca</p>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-4">Peringkat Siswa Terbaik</h3>
+                    <div id="leaderboard" class="space-y-3">
+                        <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+                            <span class="text-gray-500">Memuat data peringkat dari Cloud...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="page-rekapan" class="page-content hidden">
+            <div class="bg-white rounded-xl shadow-sm p-4 sm:p-8 mobile-padding">
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Rekapan Data</h2>
+                <p class="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">Preview data yang tersimpan di Cloud Firestore</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
+                    <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Lihat Data Online</h3>
+                        <p class="text-gray-600 text-sm mb-4">Akses langsung ke Firebase Console untuk melihat data real-time</p>
+                        <button onclick="window.open('https://console.firebase.google.com/project/jurnal-literasi-13b0c/firestore/data/~2Fjurnal_membaca', '_blank', 'noopener,noreferrer')" class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-yellow-600 transition-all">
+                            Buka Firebase Console
+                        </button>
+                    </div>
+                    
+                    <div class="bg-gradient-to-br from-yellow-50 to-yellow-100 rounded-xl p-6 border border-yellow-200">
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">Unduh Excel (CSV)</h3>
+                        <p class="text-gray-600 text-sm mb-4">Download semua data dari Cloud dalam format CSV</p>
+                        <button onclick="downloadExcel()" id="downloadButton" class="bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-yellow-600 transition-all">
+                            Download Excel
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Preview Data (Max 100 Entri)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-left py-3 px-4 font-medium text-gray-700">No</th>
+                                    <th class="text-left py-3 px-4 font-medium text-gray-700">Nama</th>
+                                    <th class="text-left py-3 px-4 font-medium text-gray-700">Kelas</th>
+                                    <th class="text-left py-3 px-4 font-medium text-gray-700">Tanggal</th>
+                                    <th class="text-left py-3 px-4 font-medium text-gray-700">Judul Buku</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dataPreview">
+                                <tr>
+                                    <td colspan="5" class="text-center py-8 text-gray-500">Memuat data dari Cloud...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t mt-8 sm:mt-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6">
+            <div class="text-center">
+                <p class="text-base sm:text-lg font-semibold text-yellow-600">Sekolah Pemimpin Masa Depan</p>
+                <p class="text-xs sm:text-sm text-gray-600 mt-1">SDN 183/II Sumber Mulya</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Array global untuk menampung data yang dimuat dari Firestore (untuk fungsi download)
+        let globalJournalData = [];
+        
+        // Fungsi navigasi yang akan di-overwrite oleh Firebase Script
+        function showPage(pageId) {
+            document.querySelectorAll('.page-content').forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            document.querySelectorAll('nav button').forEach(btn => {
+                btn.classList.remove('nav-active');
+                btn.classList.add('text-gray-600', 'hover:text-gray-800');
+            });
+            
+            const pageElement = document.getElementById(`page-${pageId}`);
+            if (pageElement) {
+                pageElement.classList.remove('hidden');
+                pageElement.classList.add('fade-in');
+            }
+            
+            const activeBtn = document.getElementById(`nav-${pageId}`);
+            if (activeBtn) {
+                activeBtn.classList.add('nav-active');
+                activeBtn.classList.remove('text-gray-600', 'hover:text-gray-800');
+            }
+            
+            document.getElementById('tanggal').valueAsDate = new Date();
+        }
+
+        // Fungsi Download Excel (Menggunakan data dari globalJournalData yang diisi Firebase)
+        function downloadExcel() {
+            if (globalJournalData.length === 0) {
+                alert('Tidak ada data yang dapat diunduh. Muat halaman Rekapan terlebih dahulu.');
+                return;
+            }
+            
+            const headers = ['No', 'Nama', 'Kelas', 'Tanggal', 'Judul Buku', 'Ringkasan', 'Waktu Simpan'];
+            const csvContent = [
+                headers.join(','),
+                ...globalJournalData.map((item, index) => [
+                    index + 1,
+                    `"${item.nama || ''}"`,
+                    `"${item.kelas || ''}"`,
+                    item.tanggal || '',
+                    `"${item.judul || ''}"`,
+                    `"${(item.ringkasan || '').replace(/"/g, '""')}"`,
+                    item.waktuSimpan || ''
+                ].join(','))
+            ].join('\n');
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', 'jurnal-literasi-sdn183-cloud.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Initialize page
+        showPage('perpustakaan');
+    </script>
+    
+    <script type="module">
+        import { initializeApp, getApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+
+        // Konfigurasi Firebase Anda (dari proyek jurnal-literasi-13b0c)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDCyWIPP7GUuDe53diG9DzjXUS2bwmlbVU",
+            authDomain: "jurnal-literasi-13b0c.firebaseapp.com",
+            projectId: "jurnal-literasi-13b0c",
+            storageBucket: "jurnal-literasi-13b0c.firebasestorage.app",
+            messagingSenderId: "767056474153",
+            appId: "1:767056474153:web:e6d16d7230d49abf836c38",
+            measurementId: "G-GCBGJE98WX"
+        };
+
+        // Inisialisasi Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const analytics = getAnalytics(app);
+
+        console.log("🔥 Firebase (Cloud Sync) berhasil diinisialisasi");
+
+        // ------------------------------------------
+        // 1. PENYIMPANAN DATA (FORM SUBMISSION)
+        // ------------------------------------------
+        const jurnalForm = document.getElementById("jurnalForm");
+        const submitButton = document.getElementById("submitButton");
+        const successMessage = document.getElementById("successMessage");
+        const errorMessage = document.getElementById("errorMessage");
+
+        jurnalForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            
+            submitButton.textContent = "Menyimpan...";
+            submitButton.disabled = true;
+            successMessage.classList.add('hidden');
+            errorMessage.classList.add('hidden');
+
+            const data = {
+                nama: document.getElementById("nama").value,
+                kelas: document.getElementById("kelas").value,
+                tanggal: document.getElementById("tanggal").value,
+                judul: document.getElementById("judul").value,
+                ringkasan: document.getElementById("ringkasan").value,
+                waktuSimpan: new Date().toISOString(),
+            };
+
+            try {
+                // Menyimpan data ke koleksi Firestore
+                await addDoc(collection(db, "jurnal_membaca"), data);
+                
+                successMessage.classList.remove('hidden');
+                jurnalForm.reset();
+                setTimeout(() => { successMessage.classList.add('hidden'); }, 4000);
+                
+            } catch (err) {
+                console.error("❌ Gagal menyimpan ke Firestore:", err);
+                errorMessage.classList.remove('hidden');
+                setTimeout(() => { errorMessage.classList.add('hidden'); }, 5000);
+                
+            } finally {
+                submitButton.textContent = "Simpan Jurnal Membaca";
+                submitButton.disabled = false;
+            }
+        });
+
+        // ------------------------------------------
+        // 2. PEMUATAN DATA (REKAPAN)
+        // ------------------------------------------
+        async function loadFirestoreData() {
+            const tableBody = document.getElementById("dataPreview");
+            tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-yellow-600">Memuat data dari Cloud...</td></tr>`;
+
+            try {
+                const querySnapshot = await getDocs(collection(db, "jurnal_membaca"));
+                const docs = querySnapshot.docs.map(doc => doc.data());
+
+                // Simpan ke variabel global untuk diunduh
+                window.globalJournalData = docs;
+
+                if (docs.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-500">Belum ada data di Cloud Firestore</td></tr>`;
+                    return;
+                }
+
+                // Ambil maksimal 100 entri untuk preview
+                const previewDocs = docs.slice(0, 100);
+                
+                const rows = previewDocs.map((d, i) => `
+                    <tr class="border-b border-gray-100">
+                    <td class="py-3 px-4">${i + 1}</td>
+                    <td class="py-3 px-4">${d.nama || "-"}</td>
+                    <td class="py-3 px-4">${d.kelas || "-"}</td>
+                    <td class="py-3 px-4">${d.tanggal || "-"}</td>
+                    <td class="py-3 px-4">${d.judul || "-"}</td>
+                    </tr>
+                `).join("");
+
+                tableBody.innerHTML = rows;
+                console.log(`📊 ${docs.length} data jurnal dimuat dari Cloud`);
+            } catch (err) {
+                console.error("❌ Gagal memuat data Firestore:", err);
+                tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-red-500">Gagal memuat data dari Cloud. (Cek koneksi/aturan Firebase)</td></tr>`;
+            }
+        }
+
+        // ------------------------------------------
+        // 3. PEMUATAN DATA (STATISTIK & LEADERBOARD)
+        // ------------------------------------------
+        async function loadFirestoreStatistics() {
+            document.getElementById("leaderboard").innerHTML = `
+                <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+                    <span class="text-gray-500">Memuat data statistik dari Cloud...</span>
+                </div>`;
+            
+            try {
+                const querySnapshot = await getDocs(collection(db, "jurnal_membaca"));
+                const data = querySnapshot.docs.map(doc => doc.data());
+
+                // Hitung total jurnal
+                const totalEntries = data.length;
+
+                // Hitung siswa aktif (unik berdasarkan nama)
+                const uniqueStudents = [...new Set(data.map(d => d.nama?.trim() || "").filter(n => n))];
+                const activeStudents = uniqueStudents.length;
+
+                // Hitung jumlah buku unik
+                const uniqueBooks = [...new Set(data.map(d => d.judul?.trim() || "").filter(t => t))];
+                const totalBooks = uniqueBooks.length;
+
+                // Update ke tampilan
+                document.getElementById("totalEntries").textContent = totalEntries;
+                document.getElementById("activeStudents").textContent = activeStudents;
+                document.getElementById("totalBooks").textContent = totalBooks;
+
+                // Buat leaderboard
+                const studentCounts = {};
+                data.forEach(d => {
+                    if (d.nama) {
+                        const nama = d.nama.trim();
+                        studentCounts[nama] = (studentCounts[nama] || 0) + 1;
+                    }
+                });
+
+                const leaderboard = Object.entries(studentCounts)
+                    .sort(([, a], [, b]) => b - a)
+                    .slice(0, 5);
+
+                const leaderboardContainer = document.getElementById("leaderboard");
+                if (leaderboard.length === 0) {
+                    leaderboardContainer.innerHTML = `
+                        <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+                            <span class="text-gray-500">Belum ada data dari Cloud.</span>
+                        </div>`;
+                } else {
+                    leaderboardContainer.innerHTML = leaderboard.map(([nama, count], index) => `
+                        <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-yellow-100">
+                            <div class="flex items-center">
+                            <span class="w-8 h-8 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">${index + 1}</span>
+                            <span class="font-medium text-gray-800">${nama}</span>
+                            </div>
+                            <span class="text-lg font-bold text-yellow-600">${count} buku</span>
+                        </div>
+                    `).join("");
+                }
+            } catch (err) {
+                console.error("❌ Gagal memuat statistik Firestore:", err);
+                document.getElementById("totalEntries").textContent = '?';
+                document.getElementById("activeStudents").textContent = '?';
+                document.getElementById("totalBooks").textContent = '?';
+                document.getElementById("leaderboard").innerHTML = `
+                    <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+                        <span class="text-red-500">Gagal memuat data dari Cloud.</span>
+                    </div>`;
+            }
+        }
+
+        // ------------------------------------------
+        // 4. MENGGABUNGKAN NAVIGASI DENGAN PEMUATAN DATA
+        // ------------------------------------------
+        // Mengambil fungsi showPage lama
+        const originalShowPage = window.showPage;
+        
+        // Mengganti fungsi showPage agar otomatis memuat data dari cloud
+        window.showPage = function(pageId) {
+            originalShowPage(pageId);
+            
+            if (pageId === "statistik") {
+                loadFirestoreStatistics();
+            } else if (pageId === "rekapan") {
+                loadFirestoreData();
+            }
+        };
+
+        // Memastikan inisialisasi awal tetap berjalan
+        window.showPage('perpustakaan');
+    </script>
+</body>
+</html>
