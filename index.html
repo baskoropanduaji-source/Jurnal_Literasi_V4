@@ -76,6 +76,11 @@
                 width: 100%;
                 border-collapse: collapse;
             }
+            /* Hilangkan kolom Aksi saat mencetak */
+            .print-area th:last-child, 
+            .print-area td:last-child {
+                display: none;
+            }
             .print-area th, .print-area td {
                 border: 1px solid #ccc;
                 padding: 8px;
@@ -83,6 +88,7 @@
             .print-header {
                 text-align: center;
                 margin-bottom: 20px;
+                display: block !important;
             }
         }
     </style>
@@ -380,8 +386,30 @@
     <script>
         // Variabel Global untuk menyimpan data Cloud Firestore yang sudah dimuat
         window.cloudJournalData = [];
+        
+        // 🛑 DATA OTENTIKASI GURU
+        const GURU_USERNAME = "SDN183";
+        const GURU_PASSWORD = "Krakatau183";
 
-        // Fungsi Global untuk Filter dan Tampilan Data (diperlukan oleh fungsi Firebase dan onchange HTML)
+        // 🛑 FUNGSI BARU: VERIFIKASI PASSWORD
+        function authenticateUser() {
+            const enteredUsername = prompt("Masukkan Username Guru untuk menghapus data:");
+            if (enteredUsername === null || enteredUsername.toUpperCase() !== GURU_USERNAME.toUpperCase()) {
+                alert("Username salah atau dibatalkan.");
+                return false;
+            }
+
+            const enteredPassword = prompt("Masukkan Password Guru:");
+            if (enteredPassword === null || enteredPassword !== GURU_PASSWORD) {
+                alert("Password salah atau dibatalkan.");
+                return false;
+            }
+            
+            return true;
+        }
+        window.authenticateUser = authenticateUser; // Daftarkan di window
+
+        // Fungsi Global untuk Filter dan Tampilan Data
         function filterAndDisplayData() {
             const selectedClass = document.getElementById("filterKelas").value;
             const tableBody = document.getElementById("dataPreview");
@@ -419,19 +447,21 @@
             const filterText = selectedClass === 'all' ? 'Semua Kelas' : `Kelas ${selectedClass}`;
             document.getElementById('printFilterInfo').textContent = `SDN 183/II Sumber Mulya - ${filterText} (${filteredData.length} entri)`;
         }
+        window.filterAndDisplayData = filterAndDisplayData;
 
 
-        // 🟡 FUNGSI BARU: CETAK PDF (MENGGUNAKAN WINDOW.PRINT)
+        // 🟡 FUNGSI CETAK PDF
         function printPDF() {
             const container = document.getElementById('print-data-container');
+            
+            // Simpan konten asli
             const originalContents = document.body.innerHTML;
             
-            // Siapkan konten untuk dicetak
+            // Siapkan konten cetak
             const printContents = container.innerHTML;
             
-            // Tampilkan Header cetak
-            container.querySelector('.print-header').classList.remove('hidden');
-
+            // Sembunyikan kolom Aksi untuk dicetak (sudah dihandle di CSS media print)
+            
             // Ganti isi body dengan konten cetak (Print Area)
             document.body.innerHTML = printContents;
             
@@ -441,11 +471,11 @@
             // Kembalikan isi body ke keadaan semula
             document.body.innerHTML = originalContents;
             
-            // Pastikan event listener untuk filter kembali berfungsi
-            // Kita panggil ulang showPage('rekapan') untuk menginisiasi ulang
+            // Reload halaman Rekapan untuk menginisiasi ulang
             showPage('rekapan'); 
         }
-        window.printPDF = printPDF; // Daftarkan di window agar bisa diakses dari HTML
+        window.printPDF = printPDF; 
+
 
         // Navigation
         function showPage(pageId) {
@@ -458,9 +488,11 @@
                 btn.classList.add('text-gray-600', 'hover:text-gray-800');
             });
             
-            document.getElementById(`page-${pageId}`).classList.remove('hidden');
-            document.getElementById(`page-jurnal`).classList.add('fade-in'); // Tambahkan fade-in kembali
-
+            const currentPage = document.getElementById(`page-${pageId}`);
+            if(currentPage) {
+                currentPage.classList.remove('hidden');
+                currentPage.classList.add('fade-in');
+            }
             
             const activeBtn = document.getElementById(`nav-${pageId}`);
             if (activeBtn) {
@@ -472,8 +504,6 @@
 
         // Download Excel function (CSV)
         function downloadExcel() {
-            // Menggunakan data yang sudah difilter di layar (yang ada di window.cloudJournalData saat ini jika belum difilter)
-            // Untuk mendapatkan data yang benar-benar difilter, kita akan re-filter
             const selectedClass = document.getElementById("filterKelas").value;
             let dataToDownload = window.cloudJournalData;
             
@@ -516,7 +546,7 @@
             link.click();
             document.body.removeChild(link);
         }
-        window.downloadExcel = downloadExcel; // Daftarkan di window
+        window.downloadExcel = downloadExcel; 
 
 
         // Set today's date as default
@@ -563,7 +593,6 @@
 
             try {
                 await addDoc(collection(db, "jurnal_membaca"), data);
-                console.log("✅ Data berhasil disimpan ke Firestore:", data);
                 
                 document.getElementById('successMessage').classList.remove('hidden');
                 jurnalForm.reset();
@@ -578,8 +607,15 @@
             }
         });
 
-        // 🔸 Fungsi Hapus Dokumen
+        // 🔸 Fungsi Hapus Dokumen (Sekarang memanggil otentikasi)
         window.deleteDocument = async function(documentId) {
+            
+            // 🛑 BARU: PANGGIL VERIFIKASI SEBELUM MENGHAPUS
+            if (!window.authenticateUser()) {
+                alert("Akses ditolak. Hanya Guru yang diizinkan menghapus data.");
+                return;
+            }
+
             if (!confirm("Anda yakin ingin menghapus data jurnal ini? Tindakan ini tidak dapat dibatalkan.")) {
                 return;
             }
@@ -601,30 +637,27 @@
         }
 
 
-        // 🔸 Fungsi untuk memuat data dari Firestore (Hanya memuat, tidak menampilkan)
+        // 🔸 Fungsi untuk memuat data dari Firestore 
         async function loadFirestoreData() {
             const tableBody = document.getElementById("dataPreview");
             tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-gray-500">Memuat data dari Firestore...</td></tr>`;
 
             try {
                 const querySnapshot = await getDocs(collection(db, "jurnal_membaca"));
-                // 🛑 KRUSIAL: Menyertakan ID Dokumen Firestore untuk fungsi Hapus
                 const docs = querySnapshot.docs.map(doc => ({
                     id: doc.id, 
                     ...doc.data()
                 }));
 
-                // Simpan data ke variabel global, lalu panggil fungsi tampilan
                 window.cloudJournalData = docs; 
-                filterAndDisplayData(); // Panggil fungsi tampilan setelah data dimuat
+                window.filterAndDisplayData(); // Panggil fungsi tampilan setelah data dimuat
 
-                console.log(`📊 ${docs.length} data jurnal dimuat dari Firestore`);
             } catch (err) {
                 console.error("❌ Gagal memuat data Firestore:", err);
                 tableBody.innerHTML = `<tr><td colspan="6" class="text-center py-8 text-red-500">Gagal memuat data dari Firestore</td></tr>`;
             }
         }
-        window.loadFirestoreData = loadFirestoreData; // Daftarkan di window
+        window.loadFirestoreData = loadFirestoreData;
 
         // 🔸 Jalankan fungsi Firestore saat halaman "Rekapan Data" dan "Statistik" ditampilkan
         const oldShowPage = window.showPage;
