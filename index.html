@@ -169,8 +169,38 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Nama Lengkap</label>
-                            <input type="text" id="nama" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
-                        </div>
+                            <select id="nama" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
+                                <option value="">Pilih Nama Siswa</option>
+                                <optgroup label="Kelas 4">
+                                    <option value="Hafiz Tri Mahardika">Hafiz Tri Mahardika</option>
+                                    <option value="Juniar Wicaksono">Juniar Wicaksono</option>
+                                    <option value="Raka Alkhalifi">Raka Alkhalifi</option>
+                                    <option value="Rayaputri Rahayu">Rayaputri Rahayu</option>
+                                </optgroup>
+                                <optgroup label="Kelas 5">
+                                    <option value="Ahmad Fatih Alfaruq">Ahmad Fatih Alfaruq</option>
+                                    <option value="Aira Putri Aulia">Aira Putri Aulia</option>
+                                    <option value="Akmal Saputra">Akmal Saputra</option>
+                                    <option value="Dafa Azka Terandera">Dafa Azka Terandera</option>
+                                    <option value="Farishta Askadina">Farishta Askadina</option>
+                                    <option value="Kinaryosi Ramadhan">Kinaryosi Ramadhan</option>
+                                    <option value="Muhamad Nawawi">Muhamad Nawawi</option>
+                                    <option value="Naufal Ahmad Alnizar">Naufal Ahmad Alnizar</option>
+                                    <option value="Prilly Tika Ardhani">Prilly Tika Ardhani</option>
+                                </optgroup>
+                                <optgroup label="Kelas 6">
+                                    <option value="Ahmad Yakoyu">Ahmad Yakoyu</option>
+                                    <option value="Alif Hamzah Zaini">Alif Hamzah Zaini</option>
+                                    <option value="Anisah">Anisah</option>
+                                    <option value="Asifa Husnainiah">Asifa Husnainiah</option>
+                                    <option value="Jihan Zulfa Salsabil">Jihan Zulfa Salsabil</option>
+                                    <option value="Kevin Dwi Saputtra">Kevin Dwi Saputtra</option>
+                                    <option value="Nazila Aqila Ulfa">Nazila Aqila Ulfa</option>
+                                    <option value="Ranu Inzak Ramadan">Ranu Inzak Ramadan</option>
+                                    <option value="Saparudin">Saparudin</option>
+                                </optgroup>
+                                </select>
+                            </div>
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
                             <select id="kelas" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-yellow-500 focus:border-transparent transition-all">
@@ -313,27 +343,22 @@
 
     <script>
         // Variabel Global untuk menyimpan data Cloud Firestore yang sudah dimuat
-        // Data ini akan digunakan oleh fungsi downloadExcel()
         window.cloudJournalData = [];
 
         // Navigation
         function showPage(pageId) {
-            // Hide all pages
             document.querySelectorAll('.page-content').forEach(page => {
                 page.classList.add('hidden');
             });
             
-            // Remove active class from all nav buttons
             document.querySelectorAll('nav button').forEach(btn => {
                 btn.classList.remove('nav-active');
                 btn.classList.add('text-gray-600', 'hover:text-gray-800');
             });
             
-            // Show selected page (pages have id "page-<pageId>")
             document.getElementById(`page-${pageId}`).classList.remove('hidden');
             document.getElementById(`page-${pageId}`).classList.add('fade-in');
             
-            // Add active class to selected nav button
             const activeBtn = document.getElementById(`nav-${pageId}`);
             if (activeBtn) {
                 activeBtn.classList.add('nav-active');
@@ -341,15 +366,13 @@
             }
         }
 
-        // Download Excel function (CSV) - MENGGUNAKAN DATA CLOUD BARU
+        // Download Excel function (CSV)
         function downloadExcel() {
-            // Cek data dari variabel global yang diisi oleh script Firebase
             if (window.cloudJournalData.length === 0) {
                 alert('Tidak ada data yang dapat diunduh. Pastikan data sudah termuat di tabel Rekapan Data.');
                 return;
             }
 
-            // Create CSV content
             const headers = ['No', 'Nama', 'Kelas', 'Tanggal', 'Judul Buku', 'Ringkasan', 'Waktu Simpan'];
             const csvContent = [
                 headers.join(','),
@@ -359,13 +382,11 @@
                     `"${item.kelas || ''}"`,
                     item.tanggal || '',
                     `"${item.judul || ''}"`,
-                    // Mengganti tanda kutip ganda agar tidak merusak format CSV
                     `"${(item.ringkasan || '').replace(/"/g, '""')}"`, 
                     item.waktuSimpan || ''
                 ].join(','))
             ].join('\n');
             
-            // Create and download file
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
@@ -385,187 +406,177 @@
     </script>
     
     <script type="module">
-      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-      import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-      import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
 
-      // Konfigurasi Firebase (Milik Proyek Jurnal Literasi - 13b0c)
-      const firebaseConfig = {
-        apiKey: "AIzaSyDCyWIPP7GUuDe53diG9DzjXUS2bwmlbVU",
-        authDomain: "jurnal-literasi-13b0c.firebaseapp.com",
-        projectId: "jurnal-literasi-13b0c",
-        storageBucket: "jurnal-literasi-13b0c.firebasestorage.app",
-        messagingSenderId: "767056474153",
-        appId: "1:767056474153:web:e6d16d7230d49abf836c38",
-        measurementId: "G-GCBGJE98WX"
-      };
-
-      // Inisialisasi Firebase
-      const app = initializeApp(firebaseConfig);
-      const db = getFirestore(app);
-      const analytics = getAnalytics(app);
-
-      console.log("🔥 Firebase berhasil diinisialisasi");
-
-      // 🔸 Tangani Form Submission (Penyimpanan ke Firestore)
-      const jurnalForm = document.getElementById("jurnalForm");
-      jurnalForm.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const data = {
-          nama: document.getElementById("nama").value,
-          kelas: document.getElementById("kelas").value,
-          tanggal: document.getElementById("tanggal").value,
-          judul: document.getElementById("judul").value,
-          ringkasan: document.getElementById("ringkasan").value,
-          waktuSimpan: new Date().toISOString(),
+        // Konfigurasi Firebase (Milik Proyek Jurnal Literasi - 13b0c)
+        const firebaseConfig = {
+            apiKey: "AIzaSyDCyWIPP7GUuDe53diG9DzjXUS2bwmlbVU",
+            authDomain: "jurnal-literasi-13b0c.firebaseapp.com",
+            projectId: "jurnal-literasi-13b0c",
+            storageBucket: "jurnal-literasi-13b0c.firebasestorage.app",
+            messagingSenderId: "767056474153",
+            appId: "1:767056474153:web:e6d16d7230d49abf836c38",
+            measurementId: "G-GCBGJE98WX"
         };
 
-        try {
-          await addDoc(collection(db, "jurnal_membaca"), data);
-          console.log("✅ Data berhasil disimpan ke Firestore:", data);
-            
-          // Tampilkan pesan sukses dan reset form di main thread
-          document.getElementById('successMessage').classList.remove('hidden');
-          jurnalForm.reset();
-          setTimeout(() => {
-              document.getElementById('successMessage').classList.add('hidden');
-          }, 3000);
+        // Inisialisasi Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const analytics = getAnalytics(app);
 
-        } catch (err) {
-          console.error("❌ Gagal menyimpan ke Firestore:", err);
-          alert("Gagal menyimpan data ke Cloud. Periksa koneksi internet atau konsol.");
-        }
-      });
+        console.log("🔥 Firebase berhasil diinisialisasi");
 
-      // 🔸 Menampilkan data Firestore di halaman Rekapan & mengisi variabel global untuk download
-      async function loadFirestoreData() {
-        const tableBody = document.getElementById("dataPreview");
-        tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-500">Memuat data dari Firestore...</td></tr>`;
+        // 🔸 Tangani Form Submission (Penyimpanan ke Firestore)
+        const jurnalForm = document.getElementById("jurnalForm");
+        jurnalForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
 
-        try {
-          const querySnapshot = await getDocs(collection(db, "jurnal_membaca"));
-          const docs = querySnapshot.docs.map(doc => doc.data());
+            const data = {
+                nama: document.getElementById("nama").value,
+                kelas: document.getElementById("kelas").value,
+                tanggal: document.getElementById("tanggal").value,
+                judul: document.getElementById("judul").value,
+                ringkasan: document.getElementById("ringkasan").value,
+                waktuSimpan: new Date().toISOString(),
+            };
 
-          // 🛑 PERBAIKAN: Simpan data ke variabel global yang bisa diakses oleh downloadExcel()
-          window.cloudJournalData = docs; 
+            try {
+                await addDoc(collection(db, "jurnal_membaca"), data);
+                console.log("✅ Data berhasil disimpan ke Firestore:", data);
+                
+                document.getElementById('successMessage').classList.remove('hidden');
+                jurnalForm.reset();
+                document.getElementById('tanggal').valueAsDate = new Date(); 
+                setTimeout(() => {
+                    document.getElementById('successMessage').classList.add('hidden');
+                }, 3000);
 
-          if (docs.length === 0) {
-            tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-500">Belum ada data di Firestore</td></tr>`;
-            return;
-          }
-
-          // Batasi preview hanya 100 entri
-          const previewDocs = docs.slice(0, 100);
-
-          const rows = previewDocs.map((d, i) => `
-            <tr class="border-b border-gray-100">
-              <td class="py-3 px-4">${i + 1}</td>
-              <td class="py-3 px-4">${d.nama || "-"}</td>
-              <td class="py-3 px-4">${d.kelas || "-"}</td>
-              <td class="py-3 px-4">${d.tanggal || "-"}</td>
-              <td class="py-3 px-4">${d.judul || "-"}</td>
-            </tr>
-          `).join("");
-
-          tableBody.innerHTML = rows;
-          console.log(`📊 ${docs.length} data jurnal dimuat dari Firestore`);
-        } catch (err) {
-          console.error("❌ Gagal memuat data Firestore:", err);
-          tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-red-500">Gagal memuat data dari Firestore</td></tr>`;
-        }
-      }
-
-      // 🔸 Jalankan fungsi Firestore saat halaman "Rekapan Data" ditampilkan
-      const oldShowPage = window.showPage;
-      window.showPage = function(pageId) {
-        oldShowPage(pageId);
-        if (pageId === "rekapan") {
-          loadFirestoreData();
-        } else if (pageId === "statistik") {
-            loadFirestoreStatistics(); // Panggil fungsi statistik di bawah
-        }
-      };
-
-    // -----------------------------------------------------
-    // 🟡 Script Tambahan: Statistik & Leaderboard dari Firestore
-    // -----------------------------------------------------
-
-      // Fungsi untuk memuat statistik dari Firestore
-      async function loadFirestoreStatistics() {
-        try {
-          // Ambil data (atau gunakan data dari window.cloudJournalData jika sudah dimuat)
-          let data = window.cloudJournalData;
-          if (data.length === 0) {
-              const querySnapshot = await getDocs(collection(db, "jurnal_membaca"));
-              data = querySnapshot.docs.map(doc => doc.data());
-          }
-          
-          // Update window.cloudJournalData agar downloadExcel bisa bekerja jika user langsung ke Statistik
-          window.cloudJournalData = data; 
-          
-          // Hitung total jurnal
-          const totalEntries = data.length;
-
-          // Hitung siswa aktif (unik berdasarkan nama)
-          const uniqueStudents = [...new Set(data.map(d => d.nama?.trim() || "").filter(n => n))];
-          const activeStudents = uniqueStudents.length;
-
-          // Hitung jumlah buku unik
-          const uniqueBooks = [...new Set(data.map(d => d.judul?.trim() || "").filter(n => n))];
-          const totalBooks = uniqueBooks.length;
-
-          // Update ke tampilan
-          document.getElementById("totalEntries").textContent = totalEntries;
-          document.getElementById("activeStudents").textContent = activeStudents;
-          document.getElementById("totalBooks").textContent = totalBooks;
-
-          // Buat leaderboard (5 siswa teratas)
-          const studentCounts = {};
-          data.forEach(d => {
-            if (d.nama) {
-              const nama = d.nama.trim();
-              studentCounts[nama] = (studentCounts[nama] || 0) + 1;
+            } catch (err) {
+                console.error("❌ Gagal menyimpan ke Firestore:", err);
+                alert("Gagal menyimpan data ke Cloud. Periksa koneksi internet atau konsol.");
             }
-          });
+        });
 
-          const leaderboard = Object.entries(studentCounts)
-            .sort(([, a], [, b]) => b - a)
-            .slice(0, 5);
+        // 🔸 Menampilkan data Firestore di halaman Rekapan & mengisi variabel global untuk download
+        async function loadFirestoreData() {
+            const tableBody = document.getElementById("dataPreview");
+            tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-500">Memuat data dari Firestore...</td></tr>`;
 
-          const leaderboardContainer = document.getElementById("leaderboard");
-          if (leaderboard.length === 0) {
-            leaderboardContainer.innerHTML = `
-              <div class="flex items-center justify-between p-4 bg-white rounded-lg">
-                <span class="text-gray-500">Belum ada data dari Firestore.</span>
-              </div>`;
-          } else {
-            leaderboardContainer.innerHTML = leaderboard.map(([nama, count], index) => `
-              <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-yellow-100">
-                <div class="flex items-center">
-                  <span class="w-8 h-8 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">${index + 1}</span>
-                  <span class="font-medium text-gray-800">${nama}</span>
-                </div>
-                <span class="text-lg font-bold text-yellow-600">${count} buku</span>
-              </div>
-            `).join("");
-          }
+            try {
+                const querySnapshot = await getDocs(collection(db, "jurnal_membaca"));
+                const docs = querySnapshot.docs.map(doc => doc.data());
 
-          console.log("📊 Statistik dimuat dari Firestore:", {
-            totalEntries,
-            activeStudents,
-            totalBooks,
-            leaderboard
-          });
+                window.cloudJournalData = docs; 
 
-        } catch (err) {
-          console.error("❌ Gagal memuat statistik Firestore:", err);
-          document.getElementById("leaderboard").innerHTML = `
-            <div class="flex items-center justify-between p-4 bg-white rounded-lg">
-              <span class="text-red-500">Gagal memuat data Firestore.</span>
-            </div>`;
+                if (docs.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-gray-500">Belum ada data di Firestore</td></tr>`;
+                    return;
+                }
+
+                const previewDocs = docs.slice(0, 100);
+
+                const rows = previewDocs.map((d, i) => `
+                    <tr class="border-b border-gray-100">
+                      <td class="py-3 px-4">${i + 1}</td>
+                      <td class="py-3 px-4">${d.nama || "-"}</td>
+                      <td class="py-3 px-4">${d.kelas || "-"}</td>
+                      <td class="py-3 px-4">${d.tanggal || "-"}</td>
+                      <td class="py-3 px-4">${d.judul || "-"}</td>
+                    </tr>
+                `).join("");
+
+                tableBody.innerHTML = rows;
+                console.log(`📊 ${docs.length} data jurnal dimuat dari Firestore`);
+            } catch (err) {
+                console.error("❌ Gagal memuat data Firestore:", err);
+                tableBody.innerHTML = `<tr><td colspan="5" class="text-center py-8 text-red-500">Gagal memuat data dari Firestore</td></tr>`;
+            }
         }
-      }
+
+        // 🔸 Jalankan fungsi Firestore saat halaman "Rekapan Data" dan "Statistik" ditampilkan
+        const oldShowPage = window.showPage;
+        window.showPage = function(pageId) {
+            oldShowPage(pageId);
+            if (pageId === "rekapan") {
+                loadFirestoreData();
+            } else if (pageId === "statistik") {
+                loadFirestoreData().then(() => {
+                    loadFirestoreStatistics();
+                }).catch(() => {
+                    console.warn("Statistik tidak dimuat karena gagal mengambil data dasar.");
+                });
+                
+            }
+        };
+
+        // -----------------------------------------------------
+        // 🟡 Script Tambahan: Statistik & Leaderboard dari Firestore
+        // -----------------------------------------------------
+
+        // Fungsi untuk memuat statistik dari Firestore
+        async function loadFirestoreStatistics() {
+            let data = window.cloudJournalData;
+            
+            if (data.length === 0) {
+                 const querySnapshot = await getDocs(collection(db, "jurnal_membaca"));
+                 data = querySnapshot.docs.map(doc => doc.data());
+                 window.cloudJournalData = data; 
+            }
+            
+            if (data.length === 0) {
+                 document.getElementById("leaderboard").innerHTML = `<div class="flex items-center justify-between p-4 bg-white rounded-lg"><span class="text-gray-500">Belum ada data untuk statistik.</span></div>`;
+                 return;
+            }
+
+            const totalEntries = data.length;
+            const uniqueStudents = [...new Set(data.map(d => d.nama?.trim() || "").filter(n => n))];
+            const activeStudents = uniqueStudents.length;
+            const uniqueBooks = [...new Set(data.map(d => d.judul?.trim() || "").filter(n => n))];
+            const totalBooks = uniqueBooks.length;
+
+            document.getElementById("totalEntries").textContent = totalEntries;
+            document.getElementById("activeStudents").textContent = activeStudents;
+            document.getElementById("totalBooks").textContent = totalBooks;
+
+            const studentCounts = {};
+            data.forEach(d => {
+                const key = `${d.nama?.trim() || 'Anonim'} (Kls ${d.kelas || '?'})`; 
+                if (d.nama) {
+                    studentCounts[key] = (studentCounts[key] || 0) + 1;
+                }
+            });
+
+            const leaderboard = Object.entries(studentCounts)
+                .sort(([, a], [, b]) => b - a)
+                .slice(0, 5);
+
+            const leaderboardContainer = document.getElementById("leaderboard");
+            if (leaderboard.length === 0) {
+                leaderboardContainer.innerHTML = `
+                    <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+                        <span class="text-gray-500">Belum ada data untuk membuat peringkat.</span>
+                    </div>`;
+            } else {
+                leaderboardContainer.innerHTML = leaderboard.map(([nama, count], index) => `
+                    <div class="flex items-center justify-between p-4 bg-white rounded-lg border border-yellow-100">
+                        <div class="flex items-center">
+                            <span class="w-8 h-8 bg-yellow-500 text-white rounded-full flex items-center justify-center text-sm font-bold mr-3">${index + 1}</span>
+                            <span class="font-medium text-gray-800">${nama}</span>
+                        </div>
+                        <span class="text-lg font-bold text-yellow-600">${count} buku</span>
+                    </div>
+                `).join("");
+            }
+
+            console.log("📊 Statistik dimuat dari Firestore:", {
+                totalEntries,
+                activeStudents,
+                totalBooks,
+                leaderboard
+            });
+        }
     </script>
-    </body>
+</body>
 </html>
