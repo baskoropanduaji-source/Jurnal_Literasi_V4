@@ -60,37 +60,6 @@
         input, select, textarea {
             font-size: 16px; /* Prevents zoom on iOS */
         }
-        
-        /* PRINT STYLES - HANYA UNTUK CETAK PDF/PRINT */
-        @media print {
-            body > *:not(.print-area) {
-                display: none;
-            }
-            .print-area {
-                display: block;
-                width: 100%;
-                margin: 0;
-                padding: 0;
-            }
-            .print-area table {
-                width: 100%;
-                border-collapse: collapse;
-            }
-            /* Hilangkan kolom Aksi saat mencetak */
-            .print-area th:last-child, 
-            .print-area td:last-child {
-                display: none;
-            }
-            .print-area th, .print-area td {
-                border: 1px solid #ccc;
-                padding: 8px;
-            }
-            .print-header {
-                text-align: center;
-                margin-bottom: 20px;
-                display: block !important;
-            }
-        }
     </style>
 </head>
 <body class="gradient-bg min-h-screen">
@@ -225,7 +194,7 @@
                                     <option value="Anisah">Anisah</option>
                                     <option value="Asifa Husnainiah">Asifa Husnainiah</option>
                                     <option value="Jihan Zulfa Salsabil">Jihan Zulfa Salsabil</option>
-                                    <option value="Kevin Dwi Saputtra">Kevin Dwi Saputtra</option>
+                                    <option value="Kevin Dwi Saputra">Kevin Dwi Saputtra</option>
                                     <option value="Nazila Aqila Ulfa">Nazila Aqila Ulfa</option>
                                     <option value="Ranu Inzak Ramadan">Ranu Inzak Ramadan</option>
                                     <option value="Saparudin">Saparudin</option>
@@ -318,7 +287,7 @@
         <div id="page-rekapan" class="page-content hidden">
             <div class="bg-white rounded-xl shadow-sm p-4 sm:p-8 mobile-padding">
                 <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Rekapan Data</h2>
-                <p class="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">Kelola dan unduh data jurnal membaca siswa. Filter sebelum mencetak.</p>
+                <p class="text-sm sm:text-base text-gray-600 mb-6 sm:mb-8">Kelola dan unduh data jurnal membaca siswa.</p>
                 
                 <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-6 sm:mb-8 items-end">
                     <div class="w-full sm:w-1/3">
@@ -335,10 +304,7 @@
                         <button onclick="downloadExcel()" class="w-full sm:w-auto bg-yellow-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-yellow-600 transition-all flex-1">
                             Download Excel
                         </button>
-                        <button onclick="printPDF()" class="w-full sm:w-auto bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-green-600 transition-all flex-1">
-                            Cetak PDF
-                        </button>
-                        <button onclick="window.open('https://console.firebase.google.com/project/jurnal-literasi-13b0c/firestore/data/~2Fjurnal_membaca', '_blank', 'noopener,noreferrer')" class="w-full sm:w-auto bg-gray-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-600 transition-all flex-1">
+                        <button onclick="openFirebaseConsoleProtected()" class="w-full sm:w-auto bg-gray-500 text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-600 transition-all flex-1">
                             Buka Firebase Console
                         </button>
                     </div>
@@ -347,11 +313,7 @@
                 <div class="bg-yellow-50 rounded-xl p-6 border border-yellow-200">
                     <h3 class="text-lg font-semibold text-gray-800 mb-4">Preview Data (Max 100 Entri yang Difilter)</h3>
                     
-                    <div id="print-data-container" class="print-area overflow-x-auto">
-                        <div class="print-header hidden">
-                            <h1 class="text-xl font-bold">REKAPAN JURNAL LITERASI MEMBACA</h1>
-                            <p id="printFilterInfo" class="text-base">SDN 183/II Sumber Mulya - Semua Kelas</p>
-                        </div>
+                    <div id="data-table-container" class="overflow-x-auto">
                         <table class="w-full text-sm">
                             <thead>
                                 <tr class="border-b border-gray-200">
@@ -360,7 +322,8 @@
                                     <th class="text-left py-3 px-4 font-medium text-gray-700">Kelas</th>
                                     <th class="text-left py-3 px-4 font-medium text-gray-700">Tanggal</th>
                                     <th class="text-left py-3 px-4 font-medium text-gray-700">Judul Buku</th>
-                                    <th class="text-left py-3 px-4 font-medium text-gray-700">Aksi</th> </tr>
+                                    <th class="text-left py-3 px-4 font-medium text-gray-700">Aksi</th>
+                                </tr>
                             </thead>
                             <tbody id="dataPreview">
                                 <tr>
@@ -391,9 +354,9 @@
         const GURU_USERNAME = "SDN183";
         const GURU_PASSWORD = "Krakatau183";
 
-        // 🛑 FUNGSI BARU: VERIFIKASI PASSWORD
+        // 🛑 FUNGSI VERIFIKASI PASSWORD
         function authenticateUser() {
-            const enteredUsername = prompt("Masukkan Username Guru untuk menghapus data:");
+            const enteredUsername = prompt("Masukkan Username Guru:");
             if (enteredUsername === null || enteredUsername.toUpperCase() !== GURU_USERNAME.toUpperCase()) {
                 alert("Username salah atau dibatalkan.");
                 return false;
@@ -407,7 +370,18 @@
             
             return true;
         }
-        window.authenticateUser = authenticateUser; // Daftarkan di window
+        window.authenticateUser = authenticateUser; 
+        
+        // 🛑 FUNGSI BARU: PROTEKSI AKSES KE FIREBASE CONSOLE
+        function openFirebaseConsoleProtected() {
+            if (authenticateUser()) {
+                window.open('https://console.firebase.google.com/project/jurnal-literasi-13b0c/firestore/data/~2Fjurnal_membaca', '_blank', 'noopener,noreferrer');
+            } else {
+                alert("Akses ke Firebase Console ditolak.");
+            }
+        }
+        window.openFirebaseConsoleProtected = openFirebaseConsoleProtected;
+
 
         // Fungsi Global untuk Filter dan Tampilan Data
         function filterAndDisplayData() {
@@ -442,40 +416,8 @@
             `).join("");
 
             tableBody.innerHTML = rows;
-            
-            // Update info untuk cetak
-            const filterText = selectedClass === 'all' ? 'Semua Kelas' : `Kelas ${selectedClass}`;
-            document.getElementById('printFilterInfo').textContent = `SDN 183/II Sumber Mulya - ${filterText} (${filteredData.length} entri)`;
         }
         window.filterAndDisplayData = filterAndDisplayData;
-
-
-        // 🟡 FUNGSI CETAK PDF
-        function printPDF() {
-            const container = document.getElementById('print-data-container');
-            
-            // Simpan konten asli
-            const originalContents = document.body.innerHTML;
-            
-            // Siapkan konten cetak
-            const printContents = container.innerHTML;
-            
-            // Sembunyikan kolom Aksi untuk dicetak (sudah dihandle di CSS media print)
-            
-            // Ganti isi body dengan konten cetak (Print Area)
-            document.body.innerHTML = printContents;
-            
-            // Panggil fungsi print browser
-            window.print();
-            
-            // Kembalikan isi body ke keadaan semula
-            document.body.innerHTML = originalContents;
-            
-            // Reload halaman Rekapan untuk menginisiasi ulang
-            showPage('rekapan'); 
-        }
-        window.printPDF = printPDF; 
-
 
         // Navigation
         function showPage(pageId) {
@@ -607,10 +549,9 @@
             }
         });
 
-        // 🔸 Fungsi Hapus Dokumen (Sekarang memanggil otentikasi)
+        // 🔸 Fungsi Hapus Dokumen (Diproteksi oleh otentikasi)
         window.deleteDocument = async function(documentId) {
             
-            // 🛑 BARU: PANGGIL VERIFIKASI SEBELUM MENGHAPUS
             if (!window.authenticateUser()) {
                 alert("Akses ditolak. Hanya Guru yang diizinkan menghapus data.");
                 return;
@@ -624,11 +565,9 @@
                 const docRef = doc(db, "jurnal_membaca", documentId);
                 await deleteDoc(docRef);
                 
-                console.log("🗑️ Dokumen berhasil dihapus:", documentId);
-                alert("Data berhasil dihapus!");
-                
                 // Muat ulang data setelah penghapusan
                 loadFirestoreData();
+                alert("Data berhasil dihapus!");
 
             } catch (err) {
                 console.error("❌ Gagal menghapus dokumen:", err);
@@ -732,13 +671,6 @@
                     </div>
                 `).join("");
             }
-
-            console.log("📊 Statistik dimuat dari Firestore:", {
-                totalEntries,
-                activeStudents,
-                totalBooks,
-                leaderboard
-            });
         }
     </script>
 </body>
